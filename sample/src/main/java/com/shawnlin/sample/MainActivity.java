@@ -19,27 +19,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        // Initialize the preferences manager
-        new PreferencesManager(this)
-            .setName("prefs")
-            .init();
-
-        Button intButton = (Button) findViewById(R.id.int_button);
-        intButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                PreferencesManager.putInt(KEY_INT, (int) (Math.random() * 10 + 10));
-                makeToast(String.valueOf(PreferencesManager.getInt(KEY_INT)));
-            }
-        });
-
-        Button objectButton = (Button) findViewById(R.id.object_button);
-        objectButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                PreferencesManager.putObject(KEY_OBJECT, new Person(getString(R.string.app_name)));
-                makeToast(PreferencesManager.getObject(KEY_OBJECT, Person.class).name);
-            }
-        });
     }
 
     private void makeToast(String str) {

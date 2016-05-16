@@ -3,6 +3,7 @@ package com.shawnlin.preferencesmanager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 
@@ -16,10 +17,9 @@ import static android.content.Context.MODE_WORLD_WRITEABLE;
 /**
  * The {@link PreferencesManager} is a utility that is used to manage the preferences.
  */
-public class PreferencesManager {
+public abstract class PreferencesManager {
 
-
-    private static SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
 
     private static Gson gson;
 
@@ -31,6 +31,7 @@ public class PreferencesManager {
 
     private int mMode;
 
+
     /**
      * Initial the preferences manager.
      *
@@ -40,37 +41,22 @@ public class PreferencesManager {
         mContext = context;
         gson = new Gson();
         mMode = INVALID_VALUE;
-    }
-
-    /**
-     * Set the name of the preferences.
-     *
-     * @param name The name of the preferences.
-     */
-    public PreferencesManager setName(String name) {
-        mName = name;
-        return this;
-    }
-
-    /**
-     * Set the mode of the preferences.
-     *
-     * @param mode The mode of the preferences.
-     */
-    public PreferencesManager setMode(int mode) {
-        mMode = mode;
-        return this;
+        init();
     }
 
     /**
      * Initial the instance of the preferences manager.
      */
-    public void init() {
+    protected void init() {
+
+        this.mName = getName();
+        this.mMode = getMode();
+
         if (mContext == null) {
             return;
         }
 
-        if (mName.isEmpty()) {
+        if (TextUtils.isEmpty(mName)) {
             mName = mContext.getPackageName();
         }
 
@@ -88,7 +74,7 @@ public class PreferencesManager {
      * @param key   The name of the preference to modify.
      * @param value The new value for the preference.
      */
-    public static void putString(String key, String value) {
+    public  void putString(String key, String value) {
         if (sharedPreferences == null) {
             return;
         }
@@ -106,7 +92,7 @@ public class PreferencesManager {
      *
      * @return Returns the preference values if they exist, or defValues.
      */
-    public static String getString(String key, String defValue) {
+    public  String getString(String key, String defValue) {
         if (sharedPreferences == null) {
             return defValue;
         }
@@ -120,7 +106,7 @@ public class PreferencesManager {
      *
      * @return Returns the preference values if they exist, or defValues.
      */
-    public static String getString(String key) {
+    public  String getString(String key) {
         return getString(key, "");
     }
 
@@ -130,7 +116,7 @@ public class PreferencesManager {
      * @param key    The name of the preference to modify.
      * @param values The set of new values for the preference.
      */
-    public static void putStringSet(String key, Set<String> values) {
+    public void putStringSet(String key, Set<String> values) {
         if (sharedPreferences == null) {
             return;
         }
@@ -148,7 +134,7 @@ public class PreferencesManager {
      *
      * @return Returns the preference values if they exist, or defValues.
      */
-    public static Set<String> getStringSet(String key, Set<String> defValues) {
+    public Set<String> getStringSet(String key, Set<String> defValues) {
         if (sharedPreferences == null) {
             return defValues;
         }
@@ -162,7 +148,7 @@ public class PreferencesManager {
      *
      * @return Returns the preference values if they exist, or defValues.
      */
-    public static Set<String> getStringSet(String key) {
+    public Set<String> getStringSet(String key) {
         return getStringSet(key, new HashSet<String>());
     }
 
@@ -172,7 +158,7 @@ public class PreferencesManager {
      * @param key   The name of the preference to modify.
      * @param value The new value for the preference.
      */
-    public static void putInt(String key, int value) {
+    public void putInt(String key, int value) {
         if (sharedPreferences == null) {
             return;
         }
@@ -191,7 +177,7 @@ public class PreferencesManager {
      *
      * @return Returns the preference values if they exist, or defValues.
      */
-    public static int getInt(String key, int defValue) {
+    public int getInt(String key, int defValue) {
         if (sharedPreferences == null) {
             return defValue;
         }
@@ -205,7 +191,7 @@ public class PreferencesManager {
      *
      * @return Returns the preference values if they exist, or defValues.
      */
-    public static int getInt(String key) {
+    public int getInt(String key) {
         return getInt(key, 0);
     }
 
@@ -215,7 +201,7 @@ public class PreferencesManager {
      * @param key   The name of the preference to modify.
      * @param value The new value for the preference.
      */
-    public static void putFloat(String key, float value) {
+    public void putFloat(String key, float value) {
         if (sharedPreferences == null) {
             return;
         }
@@ -233,7 +219,7 @@ public class PreferencesManager {
      *
      * @return Returns the preference values if they exist, or defValues.
      */
-    public static float getFloat(String key, float defValue) {
+    public float getFloat(String key, float defValue) {
         if (sharedPreferences == null) {
             return defValue;
         }
@@ -247,7 +233,7 @@ public class PreferencesManager {
      *
      * @return Returns the preference values if they exist, or defValues.
      */
-    public static float getFloat(String key) {
+    public float getFloat(String key) {
         return getFloat(key, 0);
     }
 
@@ -257,7 +243,7 @@ public class PreferencesManager {
      * @param key   The name of the preference to modify.
      * @param value The new value for the preference.
      */
-    public static void putLong(String key, long value) {
+    public void putLong(String key, long value) {
         if (sharedPreferences == null) {
             return;
         }
@@ -275,7 +261,7 @@ public class PreferencesManager {
      *
      * @return Returns the preference values if they exist, or defValues.
      */
-    public static long getLong(String key, long defValue) {
+    public long getLong(String key, long defValue) {
         if (sharedPreferences == null) {
             return defValue;
         }
@@ -289,7 +275,7 @@ public class PreferencesManager {
      *
      * @return Returns the preference values if they exist, or defValues.
      */
-    public static long getLong(String key) {
+    public long getLong(String key) {
         return getLong(key, 0);
     }
 
@@ -299,7 +285,7 @@ public class PreferencesManager {
      * @param key   The name of the preference to modify.
      * @param value The new value for the preference.
      */
-    public static void putBoolean(String key, boolean value) {
+    public void putBoolean(String key, boolean value) {
         if (sharedPreferences == null) {
             return;
         }
@@ -317,7 +303,7 @@ public class PreferencesManager {
      *
      * @return Returns the preference values if they exist, or defValues.
      */
-    public static boolean getBoolean(String key, boolean defValue) {
+    public boolean getBoolean(String key, boolean defValue) {
         if (sharedPreferences == null) {
             return defValue;
         }
@@ -331,7 +317,7 @@ public class PreferencesManager {
      *
      * @return Returns the preference values if they exist, or defValues.
      */
-    public static boolean getBoolean(String key) {
+    public boolean getBoolean(String key) {
         return getBoolean(key, false);
     }
 
@@ -341,7 +327,7 @@ public class PreferencesManager {
      * @param key   The name of the preference to modify.
      * @param value The new value for the preference.
      */
-    public static void putObject(String key, Object value) {
+    public void putObject(String key, Object value) {
         if (gson == null || value == null) {
             return;
         }
@@ -357,7 +343,7 @@ public class PreferencesManager {
      *
      * @return Returns the preference values if they exist, or defValues.
      */
-    public static <T> T getObject(String key, Class<T> type) {
+    public <T> T getObject(String key, Class<T> type) {
         if (sharedPreferences == null || gson == null) {
             return null;
         }
@@ -381,7 +367,7 @@ public class PreferencesManager {
      *
      * @param key The name of the preference to remove.
      */
-    public static void remove(String key) {
+    public void remove(String key) {
         if (sharedPreferences == null) {
             return;
         }
@@ -391,11 +377,14 @@ public class PreferencesManager {
     /**
      * Remove all values from the preferences editor.
      */
-    public static void clear() {
+    public void clear() {
         if (sharedPreferences == null) {
             return;
         }
         sharedPreferences.edit().clear().apply();
     }
 
+    protected abstract String getName();
+
+    protected abstract int getMode();
 }
