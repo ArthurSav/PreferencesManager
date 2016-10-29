@@ -25,8 +25,6 @@ public abstract class PreferencesManager {
 
     private static int INVALID_VALUE = -1;
 
-    private Context mContext;
-
     private String mName;
 
     private int mMode;
@@ -38,26 +36,25 @@ public abstract class PreferencesManager {
      * @param context The context of the application.
      */
     public PreferencesManager(Context context) {
-        mContext = context;
         gson = new Gson();
         mMode = INVALID_VALUE;
-        init();
+        init(context);
     }
 
     /**
      * Initial the instance of the preferences manager.
      */
-    protected void init() {
+    protected void init(Context context) {
 
         this.mName = getName();
         this.mMode = getMode();
 
-        if (mContext == null) {
+        if (context == null) {
             return;
         }
 
         if (TextUtils.isEmpty(mName)) {
-            mName = mContext.getPackageName();
+            mName = context.getPackageName();
         }
 
         if (mMode == INVALID_VALUE || (mMode != MODE_PRIVATE && mMode != MODE_WORLD_READABLE
@@ -65,7 +62,11 @@ public abstract class PreferencesManager {
             mMode = MODE_PRIVATE;
         }
 
-        sharedPreferences = mContext.getSharedPreferences(mName, mMode);
+        sharedPreferences = context.getSharedPreferences(mName, mMode);
+    }
+
+    public SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
     }
 
     /**
